@@ -1,5 +1,0 @@
-// Elves go on foot
-// taking inventory of supplies - puzzle input is number of calories each elf is carrying
-// one item per line, \n separated. Number is amount of calories in item.
-// blank line == new elf
-// Goal - how many calories are being carried by the elf with the MOST calories?
