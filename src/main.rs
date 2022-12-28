@@ -1,4 +1,6 @@
 mod day1;
+mod day2;
+pub mod util;
 pub enum Data {
     Input,
     Test
@@ -9,5 +11,11 @@ fn main() {
     let ans = day1::part1(Data::Input);
     println!("  Part 1: {}", ans);
     let ans = day1::part2(Data::Input);
+    println!("  Part 2: {}", ans);
+
+    println!("Day 2:");
+    let ans = day2::part1(Data::Input);
+    println!("  Part 1: {}", ans);
+    let ans = day2::part2(Data::Input);
     println!("  Part 2: {}", ans);
 }

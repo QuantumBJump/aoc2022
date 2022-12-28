@@ -8,22 +8,10 @@
 // read input file line by line
 
 use std::fs::File;
-use std::path::Path;
-use std::io::{self, BufRead};
-use super::Data;
+use super::util::read_lines;
+use std::io::{self};
+use super::util::get_filename;
 
-fn get_filename(choice: super::Data) -> &'static str {
-    match choice {
-        Data::Input => "./src/day1/input.txt",
-        Data::Test => "./src/day1/test.txt"
-    }
-}
-
-pub fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
-where P: AsRef<Path>, {
-    let file = File::open(filename)?;
-    Ok(io::BufReader::new(file).lines())
-}
 
 fn lines_to_elves(lines: io::Result<io::Lines<io::BufReader<File>>>) -> Vec<Vec<String>> {
     let mut elves: Vec<Vec<String>> = Vec::new();
@@ -55,7 +43,7 @@ fn elf_cals(elf: Vec<String>) -> isize {
 
 pub fn part1(input: super::Data) -> isize {
     let mut max: isize = 0;
-    let file = get_filename(input);
+    let file = get_filename("day1", input);
     let lines = read_lines(file);
     for elf in lines_to_elves(lines) {
         let cals = elf_cals(elf);
@@ -101,7 +89,7 @@ impl TopThree {
 
 pub fn part2(input: super::Data) -> isize {
     let mut tt = TopThree::init();
-    let file = get_filename(input);
+    let file = get_filename("day1", input);
     let lines = read_lines(file);
     for elf in lines_to_elves(lines) {
         let cals = elf_cals(elf);
@@ -113,6 +101,7 @@ pub fn part2(input: super::Data) -> isize {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use super::super::Data;
     #[test]
     fn test_part1() {
         let res = part1(Data::Test);
