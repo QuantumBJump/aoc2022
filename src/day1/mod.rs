@@ -10,6 +10,14 @@
 use std::fs::File;
 use std::path::Path;
 use std::io::{self, BufRead};
+use super::Data;
+
+fn get_filename(choice: super::Data) -> &'static str {
+    match choice {
+        Data::Input => "./src/day1/input.txt",
+        Data::Test => "./src/day1/test.txt"
+    }
+}
 
 pub fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
 where P: AsRef<Path>, {
@@ -45,14 +53,9 @@ fn elf_cals(elf: Vec<String>) -> isize {
     cals
 }
 
-pub fn part1(filename: &str) -> isize {
+pub fn part1(input: super::Data) -> isize {
     let mut max: isize = 0;
-    let file;
-    if filename == "input" {
-        file = "./src/day1/input.txt"
-    } else {
-        file = "./src/day1/test.txt"
-    }
+    let file = get_filename(input);
     let lines = read_lines(file);
     for elf in lines_to_elves(lines) {
         let cals = elf_cals(elf);
@@ -63,13 +66,56 @@ pub fn part1(filename: &str) -> isize {
     max
 }
 
+#[derive(Debug, PartialEq)]
+struct TopThree {
+    elves: [isize; 3]
+}
+
+impl TopThree {
+    fn init() -> TopThree {
+        TopThree { elves: [0, 0, 0] }
+    }
+
+    fn insert(&mut self, input: isize) {
+        let mut to_input = input;
+        let mut elves: [isize; 3] = [0, 0, 0];
+        for (idx, elf) in self.elves.iter().enumerate() {
+            if to_input >= *elf {
+                elves[idx] = to_input;
+                to_input = *elf;
+            } else {
+                elves[idx] = *elf;
+            }
+        }
+        self.elves = elves;
+    }
+
+    fn sum(&self) -> isize {
+        let mut res = 0;
+        for elf in self.elves{
+            res += elf;
+        }
+        res
+    }
+}
+
+pub fn part2(input: super::Data) -> isize {
+    let mut tt = TopThree::init();
+    let file = get_filename(input);
+    let lines = read_lines(file);
+    for elf in lines_to_elves(lines) {
+        let cals = elf_cals(elf);
+        tt.insert(cals)
+    }
+    tt.sum()
+}
 
 #[cfg(test)]
 mod tests {
     use super::*;
     #[test]
     fn test_part1() {
-        let res = part1("test");
+        let res = part1(Data::Test);
         let want = 24000;
         assert_eq!(res, want);
     }
@@ -102,39 +148,44 @@ mod tests {
         }
         assert_eq!(want, result);
     }
+
+    #[test]
+    fn topthree_init() {
+        let res = TopThree::init();
+        let want = TopThree{elves: [0, 0, 0]};
+        assert_eq!(want, res);
+    }
+
+    #[test]
+    fn topthree_insert() {
+        let mut tt = TopThree{elves: [20, 12, 8]};
+        tt.insert(16);
+        assert_eq!(TopThree{elves: [20, 16, 12]}, tt);
+    }
+
+    #[test]
+    fn topthree_insert_lower() {
+        let mut tt = TopThree{elves: [20, 12, 8]};
+        tt.insert(6);
+        assert_eq!(TopThree{elves: [20, 12, 8]}, tt);
+    }
+
+    #[test]
+    fn topthree_sum() {
+        let mut tt = TopThree::init();
+        assert_eq!(tt.sum(), 0);
+        tt.insert(1);
+        tt.insert(2);
+        tt.insert(3);
+        assert_eq!(tt.sum(), 6);
+        tt.insert(2);
+        assert_eq!(tt.sum(), 7);
+    }
+
+    #[test]
+    fn part_two() {
+        let res = part2(Data::Test);
+        let want: isize = 45000;
+        assert_eq!(want, res);
+    }
 }
-
-// struct TopThree {
-//     Elves: [isize; 3]
-// }
-
-// impl TopThree {
-//     fn init() -> TopThree {
-//         TopThree { Elves: [0, 0, 0] }
-//     }
-
-//     fn insert(&self, input: isize) {
-//         let mut to_input = input;
-//         for elf in self.Elves {
-//             if to_input >= elf {
-//                 let tmp = elf;
-//                 elf = to_input;
-//                 to_input = tmp;
-//             }
-//         }
-//     }
-// }
-
-// pub fn part2() -> [isize; 3] {
-//     println!("  Part Two:");
-//     let mut ans: [isize; 3] = [0, 0, 0];
-//     if let Ok(lines) = read_lines("./src/day1/input.txt") {
-//         loop {
-//             let elfR = parse_elf_cals(&lines);
-//             if let Ok(elf) = elfR {
-
-//             }
-//         }
-//     }
-//     ans
-// }
