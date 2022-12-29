@@ -6,7 +6,6 @@ pub mod util;
 
 #[cfg(test)]
 extern crate table_test;
-const DEBUG: bool = false;
 pub enum Data {
     Input,
     Test

@@ -1,8 +1,8 @@
 use std::{time::{Instant, Duration}, cmp::Ordering, fmt};
 
 use crate::util::{get_filename, read_lines};
-use crate::DEBUG;
 
+const DEBUG: bool = false;
 // Every section in the camp has a unique ID
 // Every elf is assigned to a range of sections
 // However, some section assignments overlap
@@ -73,6 +73,25 @@ fn complete_overlap(range1: &Range, range2: &Range) -> bool {
     contains
 }
 
+fn any_overlap(range1: &Range, range2: &Range) -> bool {
+    let contains: bool;
+    if range1.lower == range2.lower {
+        contains = true;
+    } else if range1.lower < range2.lower {
+        contains = range1.upper >= range2.lower
+    } else {
+        contains = range2.upper >= range1.lower
+    }
+    if DEBUG {
+        print!("    Comparing {} with {}. ", &range1, &range2);
+        match contains {
+            true => println!("Overlap"),
+            false => println!("No overlap"),
+        }
+    }
+    contains
+}
+
 impl fmt::Display for Range {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}-{}", self.lower, self.upper)
@@ -107,9 +126,19 @@ pub fn part1(input: super::Data) -> (usize, Duration) {
 
 pub fn part2(input: super::Data) -> (usize, Duration) {
     let now = Instant::now();
-    let res: usize = 0;
+    let mut res: usize = 0;
     let lines = read_lines(get_filename("day4", input));
-    if let Ok(_lines) = lines {
+    if let Ok(lines) = lines {
+        for line in lines {
+            if let Ok(line) = line {
+                let (range1, range2) = split_ranges(line);
+                let range1 = Range::create(range1);
+                let range2 = Range::create(range2);
+                if any_overlap(&range1, &range2) {
+                    res += 1;
+                }
+            }
+        }
 
     }
 
@@ -151,7 +180,7 @@ mod tests {
     #[test]
     fn part2() {
         let (res, _dur) = super::part2(Data::Test);
-        let want = 0;
+        let want = 4;
         assert_eq!(want, res);
     }
 }
