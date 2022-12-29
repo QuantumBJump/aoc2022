@@ -1,4 +1,5 @@
 use crate::util::{read_lines, get_filename};
+use std::time::{Instant, Duration};
 
 use super::Data;
 
@@ -165,7 +166,8 @@ fn parse_line_part2(line: String) -> isize {
     Round::cheat(op, goal).score()
 }
 
-pub fn part1(input: Data) -> isize {
+pub fn part1(input: Data) -> (isize, Duration) {
+    let now = Instant::now();
     let file = read_lines(get_filename("day2", input));
     let mut score = 0;
     if let Ok(lines) = file {
@@ -176,10 +178,11 @@ pub fn part1(input: Data) -> isize {
             }
         }
     }
-    score
+    (score, now.elapsed())
 }
 
-pub fn part2(input: Data) -> isize {
+pub fn part2(input: Data) -> (isize, Duration) {
+    let now = Instant::now();
     let file = read_lines(get_filename("day2", input));
     let mut score = 0;
     if let Ok(lines) = file {
@@ -189,7 +192,7 @@ pub fn part2(input: Data) -> isize {
             }
         }
     }
-    score
+    (score, now.elapsed())
 }
 
 #[cfg(test)]
@@ -197,7 +200,7 @@ mod tests {
     use super::*;
     #[test]
     fn part1() {
-        let res = super::part1(Data::Test);
+        let (res, _dur) = super::part1(Data::Test);
         let want = 15;
         assert_eq!(want, res);
     }

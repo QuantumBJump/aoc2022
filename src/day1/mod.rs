@@ -7,7 +7,7 @@
 // Steps
 // read input file line by line
 
-use std::fs::File;
+use std::{fs::File, time::Instant, time::Duration};
 use super::util::read_lines;
 use std::io::{self};
 use super::util::get_filename;
@@ -41,7 +41,8 @@ fn elf_cals(elf: Vec<String>) -> isize {
     cals
 }
 
-pub fn part1(input: super::Data) -> isize {
+pub fn part1(input: super::Data) -> (isize, Duration) {
+    let now = Instant::now();
     let mut max: isize = 0;
     let file = get_filename("day1", input);
     let lines = read_lines(file);
@@ -51,7 +52,7 @@ pub fn part1(input: super::Data) -> isize {
             max = cals;
         }
     }
-    max
+    (max, now.elapsed())
 }
 
 #[derive(Debug, PartialEq)]
@@ -87,7 +88,8 @@ impl TopThree {
     }
 }
 
-pub fn part2(input: super::Data) -> isize {
+pub fn part2(input: super::Data) -> (isize, Duration) {
+    let now = Instant::now();
     let mut tt = TopThree::init();
     let file = get_filename("day1", input);
     let lines = read_lines(file);
@@ -95,7 +97,7 @@ pub fn part2(input: super::Data) -> isize {
         let cals = elf_cals(elf);
         tt.insert(cals)
     }
-    tt.sum()
+    (tt.sum(), now.elapsed())
 }
 
 #[cfg(test)]
@@ -104,7 +106,7 @@ mod tests {
     use super::super::Data;
     #[test]
     fn test_part1() {
-        let res = part1(Data::Test);
+        let (res, _dur) = part1(Data::Test);
         let want = 24000;
         assert_eq!(res, want);
     }
@@ -173,7 +175,7 @@ mod tests {
 
     #[test]
     fn part_two() {
-        let res = part2(Data::Test);
+        let (res, _dur) = part2(Data::Test);
         let want: isize = 45000;
         assert_eq!(want, res);
     }

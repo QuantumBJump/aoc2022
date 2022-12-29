@@ -1,7 +1,12 @@
 mod day1;
 mod day2;
 mod day3;
+mod day4;
 pub mod util;
+
+#[cfg(test)]
+extern crate table_test;
+const DEBUG: bool = false;
 pub enum Data {
     Input,
     Test
@@ -9,20 +14,26 @@ pub enum Data {
 fn main() {
     println!("Hello, world!");
     println!("Day 1:");
-    let ans = day1::part1(Data::Input);
-    println!("  Part 1: {}", ans);
-    let ans = day1::part2(Data::Input);
-    println!("  Part 2: {}", ans);
+    let (ans, dur)= day1::part1(Data::Input);
+    println!("  Part 1: {} in {:.2?}", ans, dur);
+    let (ans, dur) = day1::part2(Data::Input);
+    println!("  Part 2: {} in {:.2?}", ans, dur);
 
     println!("Day 2:");
-    let ans = day2::part1(Data::Input);
-    println!("  Part 1: {}", ans);
-    let ans = day2::part2(Data::Input);
-    println!("  Part 2: {}", ans);
+    let (ans, dur) = day2::part1(Data::Input);
+    println!("  Part 1: {} in {:.2?}", ans, dur);
+    let (ans, dur) = day2::part2(Data::Input);
+    println!("  Part 2: {} in {:.2?}", ans, dur);
 
     println!("Day 3:");
-    let ans = day3::part1(Data::Input);
-    println!("  Part 1: {}", ans);
-    let ans = day3::part2(Data::Input);
-    println!("  Part 2: {}", ans);
+    let (ans, dur) = day3::part1(Data::Input);
+    println!("  Part 1: {} in {:.2?}", ans, dur);
+    let (ans, dur) = day3::part2(Data::Input);
+    println!("  Part 2: {} in {:.2?}", ans, dur);
+
+    println!("Day 4:");
+    let (ans, dur) = day4::part1(Data::Input);
+    println!("  Part 1: {} in {:.2?}", ans, dur);
+    let (ans, dur) = day4::part2(Data::Input);
+    println!("  Part 2: {} in {:.2?}", ans, dur);
 }

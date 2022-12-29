@@ -2,6 +2,7 @@
 
 use super::util::read_lines;
 use super::util::get_filename;
+use std::time::{Instant, Duration};
 
 // Split the rucksack into its two compartments
 fn split_compartments(rucksack: &str) -> Vec<&str> {
@@ -88,7 +89,8 @@ fn get_badge(elf1: Vec<char>, elf2: Vec<char>, elf3: Vec<char>) -> char {
     return ' '
 }
 
-pub fn part1(input: super::Data) -> usize {
+pub fn part1(input: super::Data) -> (usize, Duration) {
+    let now = Instant::now();
     let file = read_lines(get_filename("day3", input));
     let mut res = 0;
     if let Ok(lines) = file {
@@ -99,10 +101,11 @@ pub fn part1(input: super::Data) -> usize {
             }
         }
     }
-    res
+    (res, now.elapsed())
 }
 
-pub fn part2(input: super::Data) -> usize {
+pub fn part2(input: super::Data) -> (usize, Duration) {
+    let now = Instant::now();
     // Get file
     let file = read_lines(get_filename("day3", input));
     let mut pri = 0;
@@ -133,7 +136,7 @@ pub fn part2(input: super::Data) -> usize {
             pri += get_priority(badge);
         }
     }
-    pri
+    (pri, now.elapsed())
 }
 
 #[cfg(test)]
