@@ -3,6 +3,7 @@ mod day2;
 mod day3;
 mod day4;
 mod day5;
+mod day6;
 pub mod util;
 
 #[cfg(test)]
@@ -42,4 +43,15 @@ fn main() {
     println!("  Part 1: {} in {:.2?}", ans, dur);
     let (ans, dur) = day5::part2(Data::Input);
     println!("  Part 2: {} in {:.2?}", ans, dur);
+
+    println!("Day 6:");
+    let res = day6::part1(Data::Input);
+    if let Ok(res) = res {
+        let (ans, dur) = res;
+        println!("  Part 1: {} in {:.2?}", ans, dur);
+    }
+    let res = day6::part2(Data::Input);
+    if let Ok((ans, dur)) = res {
+        println!("  Part 2: {} in {:.2?}", ans, dur);
+    }
 }
